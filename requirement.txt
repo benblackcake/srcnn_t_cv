@@ -1,0 +1,12 @@
+h5py==2.10.0
+Keras-Applications==1.0.8
+Keras-Preprocessing==1.1.0
+numpy==1.17.3
+opencv-python==4.1.1.26
+Pillow==6.0.0
+scipy==1.2.1
+tensorboard==1.15.0
+tensorflow==1.15.0rc2
+tensorflow-estimator==1.15.1
+termcolor==1.1.0
+
