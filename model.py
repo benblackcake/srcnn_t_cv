@@ -10,6 +10,8 @@ from utils import (
     checkimage,
     imsave
 )
+
+__DEBUG__ = True
 class SRCNN(object):
 
     def __init__(self,
@@ -93,8 +95,8 @@ class SRCNN(object):
             result = self.pred.eval({self.images: input_})
             #print(label_[1] - result[1])
             image = merge(result, [nx, ny], self.c_dim)
-            #image_LR = merge(input_, [nx, ny], self.c_dim)
-            #checkimage(image_LR)
+            # image_LR = merge(input_, [nx, ny], self.c_dim)
+            checkimage(image)
             imsave(image, config.result_dir+'/result.png', config)
 
     def load(self, checkpoint_dir):
