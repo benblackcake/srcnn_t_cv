@@ -7,6 +7,7 @@ import h5py
 
 __DEBUG__ = False
 __DEBUG__SHOW_CV = False
+__DEBUG__imagePath = "./__DEBUG__"
 # Get the Image
 def imread(path):
     img = cv2.imread(path)
@@ -56,6 +57,7 @@ def preprocess(path ,scale = 3):
     
     bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     input_ = cv2.resize(bicbuic_img,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
+    cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), bicbuic_img)
     return input_, label_
 
 def prepare_data(dataset="Train",Input_img=""):
