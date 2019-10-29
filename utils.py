@@ -74,8 +74,8 @@ def preprocess(path ,scale = 3):
     cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), input_)
 
     if __DEBUG__SHOW__IMAGE :
-        #imBGR2RGB = cv2.cvtColor(input_.astype(np.float32),cv2.COLOR_BGR2RGB)
-        plt.imshow(input_)
+        imBGR2RGB = cv2.cvtColor(bicbuic_img,cv2.COLOR_BGR2RGB)
+        plt.imshow(imBGR2RGB)
         plt.show()
 
     return input_, label_

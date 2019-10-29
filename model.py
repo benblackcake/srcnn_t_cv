@@ -97,7 +97,7 @@ class SRCNN(object):
             #print(label_[1] - result[1])
             image = merge(result, [nx, ny], self.c_dim)
 
-            checkimage(image)
+            #checkimage(image)
 
             imsave(image, config.result_dir+'/result.png', config)
 
