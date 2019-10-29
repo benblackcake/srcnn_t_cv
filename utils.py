@@ -7,8 +7,13 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 __DEBUG__=True
 __DEBUG__SHOW__IMAGE = True
+
+__DEBUG__ = False
+__DEBUG__SHOW_CV = False
+
 __DEBUG__imagePath = "./__DEBUG__"
 # Get the Image
 def imread(path):
@@ -67,10 +72,12 @@ def preprocess(path ,scale = 3):
     bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     input_ = cv2.resize(bicbuic_img,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), input_)
+
     if __DEBUG__SHOW__IMAGE :
         #imBGR2RGB = cv2.cvtColor(input_.astype(np.float32),cv2.COLOR_BGR2RGB)
         plt.imshow(input_)
         plt.show()
+
     return input_, label_
 
 def prepare_data(dataset="Train",Input_img=""):
@@ -130,6 +137,11 @@ def make_sub_data(data, padding, config):
                 sub_input = input_[x: x + config.image_size, y: y + config.image_size] # 33 * 33
                 sub_label = label_[x + padding: x + padding + config.label_size, y + padding: y + padding + config.label_size] # 21 * 21
 
+                if __DEBUG__:
+                    print("x")
+                    print(x, x + config.image_size)
+                    print("y")
+                    print(y,y+config.image_size)
 
                 # Reshape the subinput and sublabel
                 sub_input = sub_input.reshape([config.image_size, config.image_size, config.c_dim])
@@ -137,10 +149,10 @@ def make_sub_data(data, padding, config):
                 # Normialize
                 sub_input =  sub_input / 255.0
                 sub_label =  sub_label / 255.0
-                
-                #cv2.imshow("im1",sub_input)
-                #cv2.imshow("im2",sub_label)
-                #cv2.waitKey(0)
+                if __DEBUG__SHOW_CV:
+                    cv2.imshow("im1",sub_input)
+                    #cv2.imshow("im2",sub_label)
+                    cv2.waitKey(0)
 
                 # Add to sequence
                 sub_input_sequence.append(sub_input)
@@ -209,7 +221,7 @@ def input_setup(config):
     # Load data path, if is_train False, get test data
     data = load_data(config.is_train, config.test_img)
 
-    padding = abs(config.image_size - config.label_size) // 2
+    padding = abs(config.image_size - config.label_size)//2#need double "/" -> "//" from "6.0" -> "6"
 
     # Make sub_input and sub_label, if is_train false more return nx, ny
     sub_input_sequence, sub_label_sequence, nx, ny = make_sub_data(data, padding, config)
