@@ -4,9 +4,12 @@ import tensorflow as tf
 import os 
 import glob
 import h5py
+import numpy as np
+import matplotlib.pyplot as plt
 
 __DEBUG__=True
-
+__DEBUG__SHOW__IMAGE = True
+__DEBUG__imagePath = "./__DEBUG__"
 # Get the Image
 def imread(path):
     img = cv2.imread(path)
@@ -20,7 +23,14 @@ def imsave(image, path, config):
 
     # NOTE: because normial, we need mutlify 255 back    
     cv2.imwrite(os.path.join(os.getcwd(),path),image * 255.)
+    print("imshow")
+    #checkimage(image)
+    if __DEBUG__SHOW__IMAGE :
+        imBGR2RGB = cv2.cvtColor(image.astype(np.float32),cv2.COLOR_BGR2RGB)
+        plt.imshow(imBGR2RGB)
+        plt.show()
 
+    
 def checkimage(image):
     cv2.imshow("test",image)
     cv2.waitKey(0)
@@ -56,6 +66,11 @@ def preprocess(path ,scale = 3):
     
     bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     input_ = cv2.resize(bicbuic_img,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
+    cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), input_)
+    if __DEBUG__SHOW__IMAGE :
+        #imBGR2RGB = cv2.cvtColor(input_.astype(np.float32),cv2.COLOR_BGR2RGB)
+        plt.imshow(input_)
+        plt.show()
     return input_, label_
 
 def prepare_data(dataset="Train",Input_img=""):
@@ -130,7 +145,7 @@ def make_sub_data(data, padding, config):
                 # Add to sequence
                 sub_input_sequence.append(sub_input)
                 sub_label_sequence.append(sub_label)
-
+        
         
     # NOTE: The nx, ny can be ignore in train
     return sub_input_sequence, sub_label_sequence, nx, ny
@@ -173,10 +188,12 @@ def merge(images, size, c_dim):
         images is the sub image set, merge it
     """
     h, w = images.shape[1], images.shape[2]
-    
+    #print(h,w)
+    #print(h*size[0], w*size[1],c_dim)
     img = np.zeros((h*size[0], w*size[1], c_dim))
     for idx, image in enumerate(images):
         i = idx % size[1]
+
         j = idx // size[1]
         img[j * h : j * h + h,i * w : i * w + w, :] = image
         #cv2.imshow("srimg",img)

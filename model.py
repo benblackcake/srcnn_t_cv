@@ -1,7 +1,8 @@
 import tensorflow as tf
 import time
 import os
-
+import matplotlib.pyplot as plt
+import numpy as np
 from utils import (
     input_setup,
     checkpoint_dir,
@@ -52,7 +53,7 @@ class SRCNN(object):
         return conv3
 
     def train(self, config):
-        
+        err_li = []
         # NOTE : if train, the nx, ny are ingnored
         nx, ny = input_setup(config)
 
@@ -79,7 +80,7 @@ class SRCNN(object):
                     batch_labels = label_[idx * config.batch_size : (idx + 1) * config.batch_size]
                     counter += 1
                     _, err = self.sess.run([self.train_op, self.loss], feed_dict={self.images: batch_images, self.labels: batch_labels})
-
+                    err_li.append(err)
                     if counter % 10 == 0:
                         print("Epoch: [%2d], step: [%2d], time: [%4.4f], loss: [%.8f]" % ((ep+1), counter, time.time()-time_, err))
                         #print(label_[1] - self.pred.eval({self.images: input_})[1],'loss:]',err)
@@ -94,7 +95,11 @@ class SRCNN(object):
             #print(label_[1] - result[1])
             image = merge(result, [nx, ny], self.c_dim)
             #image_LR = merge(input_, [nx, ny], self.c_dim)
-            #checkimage(image_LR)
+            #checkimage(result)
+            
+
+            #plt.imshow((image * 255).astype(np.uint8))
+            
             imsave(image, config.result_dir+'/result.png', config)
 
     def load(self, checkpoint_dir):
