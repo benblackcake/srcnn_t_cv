@@ -84,7 +84,8 @@ def preprocess(path ,scale = 3):
     down_sampling_img = down_sampling_img.astype(np.uint8)
 
     #bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
-    input_ = cv2.resize(down_sampling_img,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
+    input_ = cv2.resize(down_sampling_img,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)
+    # Resize by scaling factor
     cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), input_)
 
     if __DEBUG__SHOW__IMAGE :
