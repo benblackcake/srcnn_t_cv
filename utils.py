@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 
 __DEBUG__=True
-__DEBUG__SHOW__IMAGE = True
+__DEBUG__SHOW__IMAGE = False
 
 __DEBUG__ = False
 __DEBUG__SHOW_CV = False
@@ -66,7 +66,7 @@ def downSample(image,scale=3):
     h_n = h//scale+1
     w_n = w//scale+1
     img = np.full((h_n,w_n,_),0)
-
+    
     for i in range(0,h):
         for j in range(0,w):
             if(i % scale==0 and j % scale==0):
@@ -83,20 +83,24 @@ def preprocess(path ,scale = 3):
     img = imread(path)
 
     label_ = downSample(img, scale)
-
+    label_ = label_.astype(np.uint8)
     
-    bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
-    input_ = cv2.resize(bicbuic_img,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
+    #bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
+    input_ = cv2.resize(label_,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), input_)
 
     if __DEBUG__SHOW__IMAGE :
         print(img.shape)
         print(label_.shape)
-        imBGR2RGB = cv2.cvtColor(bicbuic_img,cv2.COLOR_BGR2RGB)
-        plt.imshow(imBGR2RGB)
-        plt.show()
+        imBGR2RGB = cv2.cvtColor(label_,cv2.COLOR_BGR2RGB)
+        imBGR2RGB_1 = cv2.cvtColor(input_,cv2.COLOR_BGR2RGB)
+        #plt.imshow(imBGR2RGB)
+        checkimage(label_)
+        checkimage(input_)
+        #plt.imshow(imBGR2RGB_1)
+        #plt.show()
 
-    return input_, label_
+    return input_,img
 
 def prepare_data(dataset="Train",Input_img=""):
     """
