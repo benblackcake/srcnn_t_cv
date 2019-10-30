@@ -92,10 +92,10 @@ def preprocess(path ,scale = 3):
         print(label_.shape)
         imBGR2RGB = cv2.cvtColor(input_,cv2.COLOR_BGR2RGB)
         imBGR2RGB_1 = cv2.cvtColor(label_,cv2.COLOR_BGR2RGB)
-        #plt.imshow(imBGR2RGB)
+        
         #checkimage(input_)
         #checkimage(label_)
-        
+        #plt.imshow(imBGR2RGB)
         plt.imshow(imBGR2RGB_1)
         plt.show()
 
