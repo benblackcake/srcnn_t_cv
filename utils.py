@@ -79,14 +79,14 @@ def checkpoint_dir(config):
 
 def preprocess(path ,scale = 3):
     img = imread(path)
-
-    label_ = downSample(img, scale)
-    label_ = label_.astype(np.uint8)
+    label_ = img
+    down_sampleing_img = downSample(img, scale)
+    down_sampleing_img = down_sampleing_img.astype(np.uint8)
 
     #bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
-    input_ = cv2.resize(label_,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
+    input_ = cv2.resize(down_sampleing_img,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), input_)
-    print(label_.shape)
+
     if __DEBUG__SHOW__IMAGE :
         print(img.shape)
         print(label_.shape)
@@ -98,7 +98,7 @@ def preprocess(path ,scale = 3):
         #plt.imshow(imBGR2RGB_1)
         #plt.show()
 
-    return input_,img
+    return input_,label_
 
 def prepare_data(dataset="Train",Input_img=""):
     """
