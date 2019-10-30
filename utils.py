@@ -8,13 +8,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-__DEBUG__=True
-__DEBUG__SHOW__IMAGE = False
-
 __DEBUG__ = False
+__DEBUG__SHOW__IMAGE = False
 __DEBUG__SHOW_CV = False
-
 __DEBUG__imagePath = "./__DEBUG__"
+
 # Get the Image
 def imread(path):
     img = cv2.imread(path)
@@ -84,11 +82,11 @@ def preprocess(path ,scale = 3):
 
     label_ = downSample(img, scale)
     label_ = label_.astype(np.uint8)
-    
+
     #bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     input_ = cv2.resize(label_,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), input_)
-
+    print(label_.shape)
     if __DEBUG__SHOW__IMAGE :
         print(img.shape)
         print(label_.shape)
@@ -160,10 +158,7 @@ def make_sub_data(data, padding, config):
                 sub_label = label_[x + padding: x + padding + config.label_size, y + padding: y + padding + config.label_size] # 21 * 21
 
                 if __DEBUG__:
-                    print("x")
-                    print(x, x + config.image_size)
-                    print("y")
-                    print(y,y+config.image_size)
+                    print(sub_label.shape)
 
                 # Reshape the subinput and sublabel
                 sub_input = sub_input.reshape([config.image_size, config.image_size, config.c_dim])
