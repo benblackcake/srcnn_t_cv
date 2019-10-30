@@ -61,6 +61,18 @@ def modcrop(img, scale =3):
         img = img[0:h, 0:w]
     return img
 
+def downSample(image,scale=3):
+    h,w,_ =image.shape
+    h_n = h//scale+1
+    w_n = w//scale+1
+    img = np.full((h_n,w_n,_),0)
+
+    for i in range(0,h):
+        for j in range(0,w):
+            if(i % scale==0 and j % scale==0):
+                img[i//scale][j//scale] = image[i][j]
+    return img
+
 def checkpoint_dir(config):
     if config.is_train:
         return os.path.join('./{}'.format(config.checkpoint_dir), "train.h5")
@@ -70,7 +82,8 @@ def checkpoint_dir(config):
 def preprocess(path ,scale = 3):
     img = imread(path)
 
-    label_ = img
+    label_ = downSample(img, scale)
+
     
     bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     input_ = cv2.resize(bicbuic_img,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
