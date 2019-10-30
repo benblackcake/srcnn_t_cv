@@ -2,7 +2,7 @@ import tensorflow as tf
 from  model import SRCNN
 flags = tf.app.flags
 FLAGS = flags.FLAGS
-flags.DEFINE_integer("epoch", 15000, "Number of epoch")
+flags.DEFINE_integer("epoch", 1500, "Number of epoch")
 flags.DEFINE_integer("image_size", 33, "The size of image input")
 flags.DEFINE_integer("label_size", 21, "The size of image output")
 flags.DEFINE_integer("c_dim", 3, "The size of channel")

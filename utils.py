@@ -47,10 +47,13 @@ def modcrop(img, scale =3):
     # Check the image is gray
 
     if len(img.shape) ==3:
+        print(img)
         h, w, _ = img.shape
         h = h - np.mod(h, scale)
         w = w - np.mod(w, scale)
         img = img[0:h, 0:w, :]
+        print("============")
+        print(img)
     else:
         h, w = img.shape
         h = h - np.mod(h, scale)
@@ -67,13 +70,15 @@ def checkpoint_dir(config):
 def preprocess(path ,scale = 3):
     img = imread(path)
 
-    label_ = modcrop(img, scale)
+    label_ = img
     
     bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     input_ = cv2.resize(bicbuic_img,None,fx = scale ,fy=scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
     cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), input_)
 
     if __DEBUG__SHOW__IMAGE :
+        print(img.shape)
+        print(label_.shape)
         imBGR2RGB = cv2.cvtColor(bicbuic_img,cv2.COLOR_BGR2RGB)
         plt.imshow(imBGR2RGB)
         plt.show()
