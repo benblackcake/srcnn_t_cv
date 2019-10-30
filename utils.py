@@ -98,7 +98,7 @@ def preprocess(path ,scale = 3):
         #plt.imshow(imBGR2RGB)
         plt.imshow(imBGR2RGB_1)
         plt.show()
-        cv2.imwrite("test.png",down_sampling_img)
+        cv2.imwrite("bicubic.png",input_)
 
     return input_,label_
 
