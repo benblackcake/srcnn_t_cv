@@ -3,4 +3,5 @@
 *.swp
 *.__pycache__
 checkpoint
+__pycache__
 
