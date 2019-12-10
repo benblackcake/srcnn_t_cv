@@ -45,13 +45,10 @@ def modcrop(img, scale =3):
     # Check the image is gray
 
     if len(img.shape) ==3:
-        print(img)
         h, w, _ = img.shape
         h = h - np.mod(h, scale)
         w = w - np.mod(w, scale)
         img = img[0:h, 0:w, :]
-        print("============")
-        print(img)
     else:
         h, w = img.shape
         h = h - np.mod(h, scale)
@@ -61,8 +58,8 @@ def modcrop(img, scale =3):
 
 def downSample(image,scale=3):
     h,w,_ =image.shape
-    h_n = h//scale+1
-    w_n = w//scale+1
+    h_n = h//scale
+    w_n = w//scale
     img = np.full((h_n,w_n,_),0)
     
     for i in range(0,h):
@@ -79,8 +76,8 @@ def checkpoint_dir(config):
 
 def preprocess(path ,scale = 3):
     img = imread(path)
-    label_ = img
-    down_sampling_img = downSample(img, scale)
+    label_ = modcrop(img, scale)
+    down_sampling_img = downSample(label_, scale)
     down_sampling_img = down_sampling_img.astype(np.uint8)
 
     #bicbuic_img = cv2.resize(label_,None,fx = 1.0/scale ,fy = 1.0/scale, interpolation = cv2.INTER_CUBIC)# Resize by scaling factor
@@ -89,15 +86,15 @@ def preprocess(path ,scale = 3):
     cv2.imwrite(os.path.join('./{}'.format(__DEBUG__imagePath + "/debug.png")), input_)
 
     if __DEBUG__SHOW__IMAGE :
-        print(img.shape)
+
         print(label_.shape)
         imBGR2RGB = cv2.cvtColor(input_,cv2.COLOR_BGR2RGB)
         imBGR2RGB_1 = cv2.cvtColor(label_,cv2.COLOR_BGR2RGB)
         
         #checkimage(input_)
         #checkimage(label_)
-        #plt.imshow(imBGR2RGB)
-        plt.imshow(imBGR2RGB_1)
+        plt.imshow(imBGR2RGB)
+        # plt.imshow(imBGR2RGB_1)
         plt.show()
         cv2.imwrite("bicubic.png",input_)
 
